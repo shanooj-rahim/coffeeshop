@@ -1,9 +1,9 @@
 package charlenescoffeecorner.model;
 
-public class Order {
+public class Product {
     private Item item;
 
-    public Order(Item item) {
+    public Product(Item item) {
         this.item = item;
     }
 

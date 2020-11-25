@@ -3,7 +3,7 @@ package charlenescoffeecorner.service;
 import charlenescoffeecorner.dao.CoffeeCornerDAO;
 import charlenescoffeecorner.dao.CoffeeCornerDAOImpl;
 import charlenescoffeecorner.model.Customer;
-import charlenescoffeecorner.model.Order;
+import charlenescoffeecorner.model.Product;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,10 +32,10 @@ public class CoffeeCornerServiceImplTest {
 
     @Test
     public void test_coffee_large_with_extra_milk() {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(new Order(COFFEE_LARGE));
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(COFFEE_LARGE));
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
         double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(3.50, v, 0.00);
     }
@@ -49,11 +49,11 @@ public class CoffeeCornerServiceImplTest {
      * */
     @Test
     public void test_coffee_large_with_extra_milk_and_snack_with_offer() {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(new Order(COFFEE_LARGE));
-        orderList.add(new Order(BACON_ROLL));
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(COFFEE_LARGE));
+        productList.add(new Product(BACON_ROLL));
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
         double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(8.00, v, 0.00);
     }
@@ -69,16 +69,16 @@ public class CoffeeCornerServiceImplTest {
      * */
     @Test
     public void test_coffee_large_with_only_beverage_offer() {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(new Order(COFFEE_LARGE));
-        orderList.add(new Order(COFFEE_MEDIUM));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(COFFEE_LARGE));
-        orderList.add(new Order(COFFEE_SMALL));
-        orderList.add(new Order(COFFEE_LARGE));
-        orderList.add(new Order(ORANGE_JUICE));
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(COFFEE_LARGE));
+        productList.add(new Product(COFFEE_MEDIUM));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(COFFEE_LARGE));
+        productList.add(new Product(COFFEE_SMALL));
+        productList.add(new Product(COFFEE_LARGE));
+        productList.add(new Product(ORANGE_JUICE));
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
         double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(21.40, v, 0.00);
     }
@@ -91,20 +91,20 @@ public class CoffeeCornerServiceImplTest {
      * */
     @Test
     public void test_beverage_offer_and_extra_offer() {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(new Order(COFFEE_LARGE));
-        orderList.add(new Order(EXTRA_MILK));
-        orderList.add(new Order(COFFEE_SMALL));
-        orderList.add(new Order(ROAST_COFFEE));
-        orderList.add(new Order(BACON_ROLL));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(COFFEE_LARGE));
+        productList.add(new Product(EXTRA_MILK));
+        productList.add(new Product(COFFEE_SMALL));
+        productList.add(new Product(ROAST_COFFEE));
+        productList.add(new Product(BACON_ROLL));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
         double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(31.45, v, 0.00);
     }
@@ -117,28 +117,28 @@ public class CoffeeCornerServiceImplTest {
      * */
     @Test
     public void test_beverage_offer_and_extra_offer_4_offers() {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(new Order(COFFEE_LARGE));
-        orderList.add(new Order(EXTRA_MILK));
-        orderList.add(new Order(COFFEE_SMALL));
-        orderList.add(new Order(ROAST_COFFEE));
-        orderList.add(new Order(BACON_ROLL));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(ORANGE_JUICE));
-        orderList.add(new Order(BACON_ROLL));
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(COFFEE_LARGE));
+        productList.add(new Product(EXTRA_MILK));
+        productList.add(new Product(COFFEE_SMALL));
+        productList.add(new Product(ROAST_COFFEE));
+        productList.add(new Product(BACON_ROLL));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(ORANGE_JUICE));
+        productList.add(new Product(BACON_ROLL));
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
         double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(55.70, v, 0.01);
     }

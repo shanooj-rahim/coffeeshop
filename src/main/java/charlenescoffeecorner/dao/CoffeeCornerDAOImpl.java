@@ -1,7 +1,7 @@
 package charlenescoffeecorner.dao;
 
 import charlenescoffeecorner.model.Item;
-import charlenescoffeecorner.model.Order;
+import charlenescoffeecorner.model.Product;
 import charlenescoffeecorner.model.Type;
 
 import java.time.LocalDateTime;
@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class CoffeeCornerDAOImpl implements CoffeeCornerDAO {
     @Override
-    public void printReceipt(Long customerStampCard, List<Order> order, double initialSum, double beverageOfferSum,
-                             double savings, List<Order> beverageOfferList, List<Order> extraOfferList) {
+    public void printReceipt(Long customerStampCard, List<Product> product, double initialSum, double beverageOfferSum,
+                             double savings, List<Product> beverageOfferList, List<Product> extraOfferList) {
         /*
          * Receipt Header starts
          * */
@@ -35,13 +35,13 @@ public class CoffeeCornerDAOImpl implements CoffeeCornerDAO {
          * Group by each item from the list of orders
          * Grouping is required to show the quantity of each item
          * */
-        Map<Item, Long> groupByItem = order.stream().collect(Collectors.groupingBy(Order::getItem, Collectors.counting()));
+        Map<Item, Long> groupByItem = product.stream().collect(Collectors.groupingBy(Product::getItem, Collectors.counting()));
 
         /*
          * Group by each item from the beveragesList
          * Grouping is required to show the quantity of each item
          * */
-        Map<Item, Long> groupByItemBeveragesOffer = beverageOfferList.stream().collect(Collectors.groupingBy(Order::getItem, Collectors.counting()));
+        Map<Item, Long> groupByItemBeveragesOffer = beverageOfferList.stream().collect(Collectors.groupingBy(Product::getItem, Collectors.counting()));
 
         /*
          * This prints all the items in the list to the receipt
@@ -60,7 +60,7 @@ public class CoffeeCornerDAOImpl implements CoffeeCornerDAO {
          * */
         System.out.println("=================================================");
         System.out.println("Total=                                   " + String.format("%.2f", (initialSum - beverageOfferSum)));
-        System.out.println("Total Items=                              " + String.format("%s", (order.size() + beverageOfferList.size())));
+        System.out.println("Total Items=                              " + String.format("%s", (product.size() + beverageOfferList.size())));
         /*
          * This part displays how much the customer saved in the current purchase
          * */
@@ -80,7 +80,7 @@ public class CoffeeCornerDAOImpl implements CoffeeCornerDAO {
          * Price is calculated by multiplying the quantity and price.
          * */
         Map<Item, Long> groupByItemFullOffer = extraOfferList.stream()
-                .collect(Collectors.groupingBy(Order::getItem, Collectors.counting()));
+                .collect(Collectors.groupingBy(Product::getItem, Collectors.counting()));
 
         /*
          * Display the orders under YOU HAVE SAVED portion of the receipt
