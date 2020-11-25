@@ -2,9 +2,7 @@ package charlenescoffeecorner.service;
 
 import charlenescoffeecorner.dao.CoffeeCornerDAO;
 import charlenescoffeecorner.model.Customer;
-import charlenescoffeecorner.model.Item;
 import charlenescoffeecorner.model.Order;
-import charlenescoffeecorner.model.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +10,10 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static charlenescoffeecorner.model.Item.EXTRA_MILK;
+import static charlenescoffeecorner.model.Type.BEVERAGE;
+import static charlenescoffeecorner.model.Type.SNACK;
 
 public class CoffeeCornerServiceImpl implements CoffeeCornerService {
 
@@ -29,33 +31,33 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
         Long customerStampCard = customer.getCustomerStampCard();
         List<Order> order = customer.getOrder();
         /*
-        * Get the sum of the price of all the items in the order before applying the offers.
-        * */
+         * Get the sum of the price of all the items in the order before applying the offers.
+         * */
         double initialSum = getInitialSum.apply(order);
         /*
-        * Get the sum of the prices of beverages after applying the beverage offer
-        * Beverage offer = every 5th beverage is free.
-        * */
+         * Get the sum of the prices of beverages after applying the beverage offer
+         * Beverage offer = every 5th beverage is free.
+         * */
         double beverageOfferSum = getBeverageOfferSum.apply(beverageOfferList, order);
         /*
-        * Get the amount of the extra item if customer is eligible for Extra offer
-        * Extra offer = if a customer orders a beverage and a snack, then one of the Extra is free
-        * Extra = EXTRA_MILK, FOAMED_MILK, ROAST_COFFEE
-        * In this case the free extra item is always EXTRA_MILK
-        * */
+         * Get the amount of the extra item if customer is eligible for Extra offer
+         * Extra offer = if a customer orders a beverage and a snack, then one of the Extra is free
+         * Extra = EXTRA_MILK, FOAMED_MILK, ROAST_COFFEE
+         * In this case the free extra item is always EXTRA_MILK
+         * */
         double extraOfferAmount = getExtraOffer.apply(extraOfferList, order);
         /*
-        * Total savings by the customer in this purchase
-        * total savings = amount saved in beverage offer + amount saved in extra offer (if any)
-        * */
+         * Total savings by the customer in this purchase
+         * total savings = amount saved in beverage offer + amount saved in extra offer (if any)
+         * */
         double savings = getSavings.apply(beverageOfferSum, extraOfferAmount);
         /*
-        * The total amount the customer have to pay for this purchase
-        * Total = initial sum - the amount reduced for the beverage offer from the initial sum.
-        * Note : Amount saved in extra offer is not considered for calculating the total, because the Extra offer is something that
-        * is not in the customer ordered list, it is an complimentary offer from the coffee shop. So it is not considered for
-        * the total. It is only considered for calculating the 'total savings' by the customer in this purchase.
-        * */
+         * The total amount the customer have to pay for this purchase
+         * Total = initial sum - the amount reduced for the beverage offer from the initial sum.
+         * Note : Amount saved in extra offer is not considered for calculating the total, because the Extra offer is something that
+         * is not in the customer ordered list, it is an complimentary offer from the coffee shop. So it is not considered for
+         * the total. It is only considered for calculating the 'total savings' by the customer in this purchase.
+         * */
         double total = getTotal.apply(initialSum, beverageOfferSum);
 
         coffeeCornerDAO.printReceipt(customerStampCard, order, initialSum, beverageOfferSum, savings, beverageOfferList, extraOfferList);
@@ -77,14 +79,14 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
          * */
         long beverageCount = orderList
                 .stream()
-                .filter(beverage -> beverage.getItem().getType().equals(Type.BEVERAGE.name()))
+                .filter(beverage -> beverage.getItem().getType().equals(BEVERAGE.name()))
                 .count();
         /*
          * Get the count of snacks
          * */
         long snackCount = orderList
                 .stream()
-                .filter(snack -> snack.getItem().getType().equals(Type.SNACK.name()))
+                .filter(snack -> snack.getItem().getType().equals(SNACK.name()))
                 .count();
 
         /*
@@ -92,14 +94,14 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
          * EXTRA_MILK is selected for giving to the customer as free extra.
          * */
         if (beverageSnackCount.test(beverageCount, snackCount)) {
-            extraOffer.add(new Order(Item.EXTRA_MILK));
-            return Item.EXTRA_MILK.getPrice();
+            extraOffer.add(new Order(EXTRA_MILK));
+            return EXTRA_MILK.getPrice();
         }
         return Double.valueOf(0);
     }
 
     private Double getBeverageOfferSumApply(List<Order> beverageOffer, List<Order> order) {
-        List<Order> beverageList = order.stream().filter(beverage -> beverage.getItem().getType().equals(Type.BEVERAGE.name()))
+        List<Order> beverageList = order.stream().filter(beverage -> beverage.getItem().getType().equals(BEVERAGE.name()))
                 .collect(Collectors.toList());
         /*
          * every 5th beverage is for free.
