@@ -36,7 +36,7 @@ public class CoffeeCornerServiceImplTest {
         orderList.add(new Order(Item.COFFEE_LARGE));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
-        double v = coffeeCornerService.processCustomer(customer);
+        double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(3.50, v, 0.00);
     }
 
@@ -54,7 +54,7 @@ public class CoffeeCornerServiceImplTest {
         orderList.add(new Order(Item.BACON_ROLL));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
-        double v = coffeeCornerService.processCustomer(customer);
+        double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(8.00, v, 0.00);
     }
 
@@ -79,7 +79,7 @@ public class CoffeeCornerServiceImplTest {
         orderList.add(new Order(Item.ORANGE_JUICE));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
-        double v = coffeeCornerService.processCustomer(customer);
+        double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(21.40, v, 0.00);
     }
 
@@ -105,7 +105,7 @@ public class CoffeeCornerServiceImplTest {
         orderList.add(new Order(Item.ORANGE_JUICE));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
-        double v = coffeeCornerService.processCustomer(customer);
+        double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(31.45, v, 0.00);
     }
 
@@ -139,7 +139,7 @@ public class CoffeeCornerServiceImplTest {
         orderList.add(new Order(Item.BACON_ROLL));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(orderList).build();
-        double v = coffeeCornerService.processCustomer(customer);
+        double v = coffeeCornerService.processCustomerOrder(customer);
         assertEquals(55.70, v, 0.01);
     }
 }
