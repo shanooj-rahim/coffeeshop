@@ -1,7 +1,6 @@
 package charlenescoffeecorner.component;
 
 import charlenescoffeecorner.model.Item;
-import charlenescoffeecorner.model.Product;
 import charlenescoffeecorner.model.Type;
 
 import java.time.LocalDateTime;
@@ -11,8 +10,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class ReceiptGenerator {
-    public void generateReceipt(Long customerStampCard, List<Product> product, double initialSum, double beverageOfferSum,
-                                double savings, List<Product> beverageOfferList, List<Product> extraOfferList) {
+    public void generateReceipt(Long customerStampCard, List<Item> items, double initialSum, double beverageOfferSum,
+                                double savings, List<Item> beverageOfferList, List<Item> extraOfferList) {
 
         /*
          * Receipt Header starts
@@ -35,13 +34,13 @@ public class ReceiptGenerator {
          * Group by each item from the list of orders
          * Grouping is required to show the quantity of each item
          * */
-        Map<Item, Long> groupByItem = product.stream().collect(Collectors.groupingBy(Product::getItem, Collectors.counting()));
+        Map<Item, Long> groupByItem = items.stream().collect(Collectors.groupingBy(item -> item, Collectors.counting()));
 
         /*
          * Group by each item from the beveragesList
          * Grouping is required to show the quantity of each item
          * */
-        Map<Item, Long> groupByItemBeveragesOffer = beverageOfferList.stream().collect(Collectors.groupingBy(Product::getItem, Collectors.counting()));
+        Map<Item, Long> groupByItemBeveragesOffer = beverageOfferList.stream().collect(Collectors.groupingBy(item -> item, Collectors.counting()));
 
         /*
          * This prints all the items in the list to the receipt
@@ -60,7 +59,7 @@ public class ReceiptGenerator {
          * */
         System.out.println("=================================================");
         System.out.println("Total=                                   " + String.format("%.2f", (initialSum - beverageOfferSum)));
-        System.out.println("Total Items=                              " + String.format("%s", (product.size() + beverageOfferList.size())));
+        System.out.println("Total Items=                              " + String.format("%s", (items.size() + beverageOfferList.size())));
         /*
          * This part displays how much the customer saved in the current purchase
          * */
@@ -80,7 +79,7 @@ public class ReceiptGenerator {
          * Price is calculated by multiplying the quantity and price.
          * */
         Map<Item, Long> groupByItemFullOffer = extraOfferList.stream()
-                .collect(Collectors.groupingBy(Product::getItem, Collectors.counting()));
+                .collect(Collectors.groupingBy(item -> item, Collectors.counting()));
 
         /*
          * Display the orders under YOU HAVE SAVED portion of the receipt

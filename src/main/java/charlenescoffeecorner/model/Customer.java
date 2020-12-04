@@ -4,32 +4,32 @@ import java.util.List;
 
 public class Customer {
     private final Long customerStampCard;
-    private final List<Product> product;
+    private final List<Item> items;
 
     public Customer(Builder builder) {
         this.customerStampCard = builder.customerStampCard;
-        this.product = builder.product;
+        this.items = builder.items;
     }
 
     public Long getCustomerStampCard() {
         return customerStampCard;
     }
 
-    public List<Product> getProduct() {
-        return product;
+    public List<Item> getItems() {
+        return items;
     }
 
     public static class Builder {
         private Long customerStampCard;
-        private List<Product> product;
+        private List<Item> items;
 
         public Builder customerStampCard(Long customerStampCard) {
             this.customerStampCard = customerStampCard;
             return this;
         }
 
-        public Builder order(List<Product> product) {
-            this.product = product;
+        public Builder order(List<Item> items) {
+            this.items = items;
             return this;
         }
 
@@ -43,7 +43,7 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "customerStampCard=" + customerStampCard +
-                ", order=" + product +
+                ", items=" + items +
                 '}';
     }
 }
