@@ -1,6 +1,6 @@
 package charlenescoffeecorner.service;
 
-import charlenescoffeecorner.dao.CoffeeCornerDAO;
+import charlenescoffeecorner.component.ReceiptGenerator;
 import charlenescoffeecorner.model.Customer;
 import charlenescoffeecorner.model.Product;
 
@@ -17,10 +17,10 @@ import static charlenescoffeecorner.model.Type.SNACK;
 
 public class CoffeeCornerServiceImpl implements CoffeeCornerService {
 
-    private CoffeeCornerDAO coffeeCornerDAO;
+    private ReceiptGenerator receiptGenerator;
 
-    public CoffeeCornerServiceImpl(CoffeeCornerDAO coffeeCornerDAO) {
-        this.coffeeCornerDAO = coffeeCornerDAO;
+    public CoffeeCornerServiceImpl(ReceiptGenerator receiptGenerator) {
+        this.receiptGenerator = receiptGenerator;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
          * */
         double total = getTotal.apply(initialSum, beverageOfferSum);
 
-        coffeeCornerDAO.printReceipt(customerStampCard, product, initialSum, beverageOfferSum, savings, beverageOfferList, extraOfferList);
+        receiptGenerator.generateReceipt(customerStampCard, product, initialSum, beverageOfferSum, savings, beverageOfferList, extraOfferList);
 
         return total;
     }

@@ -1,4 +1,4 @@
-package charlenescoffeecorner.dao;
+package charlenescoffeecorner.component;
 
 import charlenescoffeecorner.model.Item;
 import charlenescoffeecorner.model.Product;
@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class CoffeeCornerDAOImpl implements CoffeeCornerDAO {
-    @Override
-    public void printReceipt(Long customerStampCard, List<Product> product, double initialSum, double beverageOfferSum,
-                             double savings, List<Product> beverageOfferList, List<Product> extraOfferList) {
+public class ReceiptGenerator {
+    public void generateReceipt(Long customerStampCard, List<Product> product, double initialSum, double beverageOfferSum,
+                                double savings, List<Product> beverageOfferList, List<Product> extraOfferList) {
+
         /*
          * Receipt Header starts
          * */

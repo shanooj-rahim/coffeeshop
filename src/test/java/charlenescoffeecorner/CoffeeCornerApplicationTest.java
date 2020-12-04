@@ -1,9 +1,9 @@
-package charlenescoffeecorner.service;
+package charlenescoffeecorner;
 
-import charlenescoffeecorner.dao.CoffeeCornerDAO;
-import charlenescoffeecorner.dao.CoffeeCornerDAOImpl;
+import charlenescoffeecorner.component.ReceiptGenerator;
 import charlenescoffeecorner.model.Customer;
 import charlenescoffeecorner.model.Product;
+import charlenescoffeecorner.service.CoffeeCornerServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,15 +13,13 @@ import java.util.List;
 import static charlenescoffeecorner.model.Item.*;
 import static org.junit.Assert.assertEquals;
 
-public class CoffeeCornerServiceImplTest {
+public class CoffeeCornerApplicationTest {
 
-    private CoffeeCornerDAO coffeeCornerDAO = null;
-    private CoffeeCornerService coffeeCornerService = null;
+    private CoffeeCornerApplication coffeeCornerApplication = null;
 
     @Before
     public void before() {
-        coffeeCornerDAO = new CoffeeCornerDAOImpl();
-        coffeeCornerService = new CoffeeCornerServiceImpl(coffeeCornerDAO);
+        coffeeCornerApplication = new CoffeeCornerApplication(new CoffeeCornerServiceImpl(new ReceiptGenerator()));
     }
 
     /*
@@ -36,7 +34,7 @@ public class CoffeeCornerServiceImplTest {
         productList.add(new Product(COFFEE_LARGE));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
-        double v = coffeeCornerService.processCustomerOrder(customer);
+        double v = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(3.50, v, 0.00);
     }
 
@@ -54,7 +52,7 @@ public class CoffeeCornerServiceImplTest {
         productList.add(new Product(BACON_ROLL));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
-        double v = coffeeCornerService.processCustomerOrder(customer);
+        double v = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(8.00, v, 0.00);
     }
 
@@ -79,7 +77,7 @@ public class CoffeeCornerServiceImplTest {
         productList.add(new Product(ORANGE_JUICE));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
-        double v = coffeeCornerService.processCustomerOrder(customer);
+        double v = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(21.40, v, 0.00);
     }
 
@@ -105,7 +103,7 @@ public class CoffeeCornerServiceImplTest {
         productList.add(new Product(ORANGE_JUICE));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
-        double v = coffeeCornerService.processCustomerOrder(customer);
+        double v = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(31.45, v, 0.00);
     }
 
@@ -139,7 +137,7 @@ public class CoffeeCornerServiceImplTest {
         productList.add(new Product(BACON_ROLL));
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(productList).build();
-        double v = coffeeCornerService.processCustomerOrder(customer);
+        double v = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(55.70, v, 0.01);
     }
 }
