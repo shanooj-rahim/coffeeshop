@@ -33,7 +33,7 @@ public class CoffeeCornerApplicationTest {
         List<Item> itemList = new ArrayList<>();
         itemList.add(COFFEE_LARGE);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(3.50, grantTotal, 0.00);
     }
@@ -50,7 +50,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(COFFEE_LARGE);
         itemList.add(EXTRA_MILK);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(3.80, grantTotal, 0.00);
     }
@@ -67,7 +67,7 @@ public class CoffeeCornerApplicationTest {
         List<Item> itemList = new ArrayList<>();
         itemList.add(BACON_ROLL);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(4.50, grantTotal, 0.00);
     }
@@ -88,9 +88,9 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ROAST_COFFEE);
         itemList.add(COFFEE_SMALL);
         itemList.add(COFFEE_MEDIUM);
-        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
+        itemList.add(ORANGE_JUICE); //This item eligible for BEVERAGE offer
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(14.15, grantTotal, 0.01);
     }
@@ -111,7 +111,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(COFFEE_LARGE);
         itemList.add(BACON_ROLL);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(8.00, grantTotal, 0.00);
     }
@@ -128,7 +128,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ORANGE_JUICE);
         itemList.add(BACON_ROLL);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(8.45, grantTotal, 0.00);
     }
@@ -147,14 +147,14 @@ public class CoffeeCornerApplicationTest {
         itemList.add(COFFEE_MEDIUM);
         itemList.add(ORANGE_JUICE);
         itemList.add(COFFEE_LARGE);
-        itemList.add(COFFEE_SMALL); //This item is eligible for offer as a part of beverage offer
+        itemList.add(COFFEE_SMALL); //This item eligible for BEVERAGE offer
         itemList.add(COFFEE_LARGE);
         itemList.add(ORANGE_JUICE);
         itemList.add(COFFEE_MEDIUM);
         itemList.add(COFFEE_SMALL);
-        itemList.add(ORANGE_JUICE);//This item is eligible for offer as a part of beverage offer
+        itemList.add(ORANGE_JUICE);//This item eligible for BEVERAGE offer
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(26.90, grantTotal, 0.01);
     }
@@ -175,7 +175,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ORANGE_JUICE);
         itemList.add(BACON_ROLL);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(12.25, grantTotal, 0.00);
     }
@@ -196,7 +196,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ORANGE_JUICE);//This item eligible for BEVERAGE offer
         itemList.add(BACON_ROLL);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(20.30, grantTotal, 0.00);
     }
@@ -218,7 +218,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ORANGE_JUICE);
         itemList.add(BACON_ROLL);
 
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
         assertEquals(24.25, grantTotal, 0.00);
     }
@@ -236,7 +236,7 @@ public class CoffeeCornerApplicationTest {
      */
     @Test(expected = NullPointerException.class)
     public void test_customer_not_null_item_list_null_should_throw_exception() {
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(null).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(null).build();
         coffeeCornerApplication.processCustomerOrder(customer);
     }
 
@@ -246,7 +246,7 @@ public class CoffeeCornerApplicationTest {
     @Test(expected = NullPointerException.class)
     public void test_customer_not_null_item_lis() {
         List<Item> itemList = new ArrayList<>();
-        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).items(itemList).build();
         coffeeCornerApplication.processCustomerOrder(customer);
     }
 }

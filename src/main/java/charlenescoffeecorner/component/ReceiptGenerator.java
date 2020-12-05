@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static charlenescoffeecorner.model.Type.COLD_BEVERAGE;
-import static charlenescoffeecorner.model.Type.HOT_BEVERAGE;
+import static java.lang.String.format;
 
 public class ReceiptGenerator {
 
@@ -36,18 +35,18 @@ public class ReceiptGenerator {
          * Receipt Header
          * */
         print.accept(LINE);
-        print.accept(String.format("%35s", "CHARLENES COFFEE CORNER") + NEWLINE);
-        print.accept(String.format("%20s", LocalDateTime.now().getYear()) + SLASH);
+        print.accept(format("%35s", "CHARLENES COFFEE CORNER") + NEWLINE);
+        print.accept(format("%20s", LocalDateTime.now().getYear()) + SLASH);
         print.accept(LocalDateTime.now().getMonth().getValue() + SLASH);
         print.accept(LocalDateTime.now().getDayOfMonth() + " ");
         print.accept(LocalDateTime.now().getHour() + ":");
         print.accept(String.valueOf(LocalDateTime.now().getMinute()) + NEWLINE);
         print.accept(ITEMS_LINE);
         /*
-         * Customer stampcard number and receipt column heading
+         * Customer stamp card number and receipt column heading
          * */
         print.accept("Customer No : " + customerStampCard + NEWLINE);
-        print.accept(String.format("%-15s %5s %13s %10s", "Item", "Type", "Quantity", "Price") + NEWLINE);
+        print.accept(format("%-15s %5s %13s %10s", "Item", "Type", "Quantity", "Price") + NEWLINE);
         print.accept(ITEMS_LINE);
         /*
          * This prints all the items in the list to the receipt
@@ -61,7 +60,7 @@ public class ReceiptGenerator {
          * */
         print.accept(EMPTY_STRING + NEWLINE);
         print.accept("Total=");
-        print.accept(String.format("%25s %8s %.2f", String.valueOf(items.size()), EMPTY_STRING, initialSum) + NEWLINE);
+        print.accept(format("%25s %8s %.2f", String.valueOf(items.size()), EMPTY_STRING, initialSum) + NEWLINE);
         /*
          * This prints the beverages list which added as a part of the BEVERAGE offer if eligible
          * Group by each item from the beveragesList
@@ -70,7 +69,7 @@ public class ReceiptGenerator {
          * If the customer is not eligible for BEVERAGE offer, this part will not be displayed in the receipt
          * */
         if (isEligibleBeverageOffer) {
-            print.accept("=================DISCOUNT========================" + NEWLINE);
+            print.accept("=================Discount========================" + NEWLINE);
             Map<Item, Long> groupByItemBeveragesOffer = getItemsGrouped(beverageOfferList);
             groupByItemBeveragesOffer.entrySet().stream().forEach(item -> displayGroupByItemOffer.accept(item));
         }
@@ -78,15 +77,15 @@ public class ReceiptGenerator {
          * This part displays the grand total amount which the customer have to pay after applying the offers.
          * */
         print.accept(LINE);
-        print.accept("Grand Total=");
-        print.accept(String.format("%28s %.2f", EMPTY_STRING, grandTotal) + NEWLINE);
+        print.accept("Grant Total=");
+        print.accept(format("%28s %.2f", EMPTY_STRING, grandTotal) + NEWLINE);
         /*
          * This part displays if customer is eligible for any EXTRA offers.
          * The price of the EXTRA is shown as 0.00 since it is a complementary offer from the coffee shop
          * If the customer is not eligible for EXTRA offer, this part will not be displayed in the receipt
          * */
         if (isEligibleExtraOffer) {
-            print.accept("=================EXTRA OFFER====================" + NEWLINE);
+            print.accept("=================Extra Offer====================" + NEWLINE);
             displayExtraOffer.accept(Item.getExtraOfferItem());
         }
 
@@ -95,8 +94,8 @@ public class ReceiptGenerator {
          * */
         print.accept(LINE);
         print.accept("Total Savings=");
-        print.accept(String.format("%27s %.2f", EMPTY_STRING, beverageOfferSum) + NEWLINE);
-        print.accept("============THANK YOU AND VISIT AGAIN!===========" + NEWLINE);
+        print.accept(format("%27s %.2f", EMPTY_STRING, beverageOfferSum) + NEWLINE);
+        print.accept("============Thank you and visit again!===========" + NEWLINE);
     }
 
     /*
@@ -124,8 +123,8 @@ public class ReceiptGenerator {
      * */
     private void displayOfferItems(Map.Entry<Item, Long> item) {
         Type type = item.getKey().getType();
-        print.accept(String.format("%-15s %5s" + getQuantityFormatting(type) + "%15.2f", item.getKey(),
-                getBeverageTypeForDisplay(type), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
+        print.accept(format("%-15s %5s" + getQuantityFormatting(type) + "%15.2f", item.getKey().getDisplayItemName(),
+                item.getKey().getDisplayTypeName(), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
     }
 
     /*
@@ -134,8 +133,8 @@ public class ReceiptGenerator {
      * Price is 0.00 since this is an offer from the shop to the customer.
      * */
     private Consumer<Item> displayExtraOffer = item -> {
-        print.accept(String.format("%-15s %5s" + getQuantityFormatting(item.getType()) + "%15.2f", item,
-                item.getType(), 1, 0.00) + NEWLINE);
+        print.accept(format("%-15s %5s" + getQuantityFormatting(item.getType()) + "%15.2f", item.getDisplayItemName(),
+                item.getDisplayTypeName(), 1, 0.00) + NEWLINE);
     };
 
     /*
@@ -143,8 +142,8 @@ public class ReceiptGenerator {
      * */
     private Consumer<Map.Entry<Item, Long>> displayGroupByItem = item -> {
         Type type = item.getKey().getType();
-        print.accept(String.format("%-15s %5s" + getQuantityFormatting(type) + "%15.2f", item.getKey(),
-                getBeverageTypeForDisplay(type), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
+        print.accept(format("%-15s %5s" + getQuantityFormatting(type) + "%15.2f", item.getKey().getDisplayItemName(),
+                item.getKey().getDisplayTypeName(), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
     };
 
     /*
@@ -152,12 +151,5 @@ public class ReceiptGenerator {
      * */
     private String getQuantityFormatting(Type item) {
         return item == Type.SNACK || item == Type.EXTRA ? "%10s" : "%7s";
-    }
-
-    /*
-     * Method to print the type of the beverage as BEVERAGE if the type is HOT_BEVERAGE or COLD_BEVERAGE
-     * */
-    private String getBeverageTypeForDisplay(Type beverageType) {
-        return beverageType == HOT_BEVERAGE || beverageType == COLD_BEVERAGE ? "BEVERAGE" : beverageType.name();
     }
 }

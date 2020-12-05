@@ -28,7 +28,7 @@ public class Customer {
             return this;
         }
 
-        public Builder order(List<Item> items) {
+        public Builder items(List<Item> items) {
             this.items = items;
             return this;
         }

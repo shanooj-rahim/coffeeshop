@@ -85,9 +85,13 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
                 .orElseThrow(() -> new NullPointerException("Item list cannot be null or empty"));
     }
 
-    private Function<List<Item>, Double> getInitialSum = orderList -> orderList.stream().mapToDouble(item -> item.getPrice()).sum();
+    private Function<List<Item>, Double> getInitialSum = getSum();
 
-    private Function<List<Item>, Double> getBeverageOfferSum = beverageList -> beverageList.stream().mapToDouble(beverageOrder -> beverageOrder.getPrice()).sum();
+    private Function<List<Item>, Double> getBeverageOfferSum = getSum();
+
+    private Function<List<Item>, Double> getSum() {
+        return orderList -> orderList.stream().mapToDouble(item -> item.getPrice()).sum();
+    }
 
     private BiFunction<Double, Double, Double> getGrandTotal = (initialSum, beverageOfferAmount) -> initialSum - beverageOfferAmount;
 
