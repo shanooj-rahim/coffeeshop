@@ -34,8 +34,8 @@ public class CoffeeCornerApplicationTest {
         itemList.add(COFFEE_LARGE);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(3.50, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(3.50, grantTotal, 0.00);
     }
 
     /**
@@ -51,14 +51,15 @@ public class CoffeeCornerApplicationTest {
         itemList.add(EXTRA_MILK);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(3.80, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(3.80, grantTotal, 0.00);
     }
 
     /**
      * No Offers applicable
      * COFFEE_LARGE = 4.50
      * Total =  4.50
+     * Grant total = 4.50
      * Total savings = 0.00
      */
     @Test
@@ -67,15 +68,15 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(4.50, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(4.50, grantTotal, 0.00);
     }
 
     /**
      * BEVERAGE offer applicable
      * ORANGE_JUICE is free as a part of the offer
      * Total = 18.10
-     * Grand Total = 14.15
+     * Grant Total = 14.15
      * Total savings = 3.95
      */
     @Test
@@ -90,8 +91,8 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(14.15, total, 0.01);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(14.15, grantTotal, 0.01);
     }
 
     /**
@@ -100,7 +101,7 @@ public class CoffeeCornerApplicationTest {
      * COFFEE_LARGE = 3.50
      * BACON_ROLL = 4.50
      * Total = 8.00
-     * Grand Total = 8.00
+     * Grant Total = 8.00
      * Extra offer = EXTRA_MILK
      * Total Savings = 0.00
      */
@@ -111,14 +112,14 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(8.00, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(8.00, grantTotal, 0.00);
     }
 
     /**
      * No Extra offer applicable since the customer ordered a cold beverage and a snack.
      * Total = 8.45
-     * Grand Total = 8.45
+     * Grant Total = 8.45
      * Total savings - 0
      */
     @Test
@@ -128,15 +129,15 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(8.45, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(8.45, grantTotal, 0.00);
     }
 
     /**
      * 2 BEVERAGE offer applicable since the customer ordered 10 beverages.
      * Customer should receive 1 COFFEE_SMALL and 1 ORANGE_JUICE as part of the beverage offer
      * Total = 33.35
-     * Grand Total = 26.90
+     * Grant Total = 26.90
      * Savings = 6.45
      */
     @Test
@@ -154,15 +155,15 @@ public class CoffeeCornerApplicationTest {
         itemList.add(ORANGE_JUICE);//This item is eligible for offer as a part of beverage offer
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(26.90, total, 0.01);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(26.90, grantTotal, 0.01);
     }
 
     /**
      * EXTRA offer applicable
      * EXTRA_MILK is preselected as EXTRA offer
      * Total = 12.25
-     * Grand Total = 12.25
+     * Grant Total = 12.25
      * Extra offer = EXTRA_MILK
      * Total Savings = 0.00
      */
@@ -175,14 +176,14 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(12.25, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(12.25, grantTotal, 0.00);
     }
 
     /**
      * BEVERAGE offer applicable
      * Total = 24.25
-     * Grand Total = 20.30
+     * Grant Total = 20.30
      * Total Savings = 3.95
      */
     @Test
@@ -196,14 +197,14 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(20.30, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(20.30, grantTotal, 0.00);
     }
 
     /**
      * BEVERAGE and EXTRA offers applicable
      * Total = 27.25
-     * Grand Total = 24.25
+     * Grant Total = 24.25
      * Total Savings = 3.00
      */
     @Test
@@ -218,8 +219,8 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double total = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(24.25, total, 0.00);
+        double grantTotal = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(24.25, grantTotal, 0.00);
     }
 
     /**
