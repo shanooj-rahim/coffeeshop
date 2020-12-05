@@ -23,6 +23,12 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
         this.receiptGenerator = receiptGenerator;
     }
 
+    /*
+    * processCustomerOrder method is for processing the customer and his orders.
+    * Input parameter - Customer object
+    * Customer object contains customer details and the list of items the customer going to purchase
+    * Return a double value i.e the total amount the customer has to pay for his purchase
+    * */
     @Override
     public double processCustomerOrder(Customer customer) {
 

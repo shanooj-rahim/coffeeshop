@@ -15,6 +15,17 @@ public class ReceiptGenerator {
     private static final char NEWLINE = '\n';
     private static final String LINE = "=================================================" + NEWLINE;
 
+    /*
+    * generateReceipt method is to generate the receipt for the purchase by customer.
+    * Input parameters
+    *   -   (Long) customer stamp card  -   Unique card number of a customer
+    *   -   List<Item> items            -   All the items the customer ordered in this purchase
+    *   -   (double) initialSum         -   The sum of all the item prices with out calculating the offers
+    *   -   (double) beverageOfferSum   -   The sum of the prices of the beverages the customer received as part of the beverage offer
+    *   -   (double) savings            -   Total amount saved by the customer as a part of the 2 offers
+    *   -   List<Item> beverageOfferList-   List of beverages the customer received as part of the beverage offer
+    *   -   List<Item> extraOfferList   -   List of extra's the customer received as part of the extra offer
+    * */
     public void generateReceipt(Long customerStampCard, List<Item> items, double initialSum, double beverageOfferSum,
                                 double savings, List<Item> beverageOfferList, List<Item> extraOfferList) {
         /*
