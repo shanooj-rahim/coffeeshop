@@ -22,51 +22,125 @@ public class CoffeeCornerApplicationTest {
         coffeeCornerApplication = new CoffeeCornerApplication(new CoffeeCornerServiceImpl(new ReceiptGenerator()));
     }
 
-    /*
-     * COFFEE_LARGE = 3.50
-     * Total should be 3.50
-     * No savings
-     * */
-
+    /**
+     * No Offers applicable
+     * Total =  3.50
+     * Grant total = 3.50
+     * Total Savings = 0.00
+     */
     @Test
-    public void test_coffee_large_with_extra_milk() {
+    public void test_only_coffee_no_offer() {
         List<Item> itemList = new ArrayList<>();
         itemList.add(COFFEE_LARGE);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double v = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(3.50, v, 0.00);
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(3.50, total, 0.00);
     }
 
-    /*
+    /**
+     * No Offers applicable
+     * Total =  3.80
+     * Grant total = 3.80
+     * Total Savings = 0.00
+     */
+    @Test
+    public void test_only_coffee_with_extra_no_offer() {
+        List<Item> itemList = new ArrayList<>();
+        itemList.add(COFFEE_LARGE);
+        itemList.add(EXTRA_MILK);
+
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(3.80, total, 0.00);
+    }
+
+    /**
+     * No Offers applicable
+     * COFFEE_LARGE = 4.50
+     * Total =  4.50
+     * Total savings = 0.00
+     */
+    @Test
+    public void test_only_snack_no_offer() {
+        List<Item> itemList = new ArrayList<>();
+        itemList.add(BACON_ROLL);
+
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(4.50, total, 0.00);
+    }
+
+    /**
+     * BEVERAGE offer applicable
+     * ORANGE_JUICE is free as a part of the offer
+     * Total = 18.10
+     * Grand Total = 14.15
+     * Total savings = 3.95
+     */
+    @Test
+    public void test_hot_cold_beverage_offer_should_have_one_beverage_offer() {
+        List<Item> itemList = new ArrayList<>();
+        itemList.add(COFFEE_LARGE);
+        itemList.add(EXTRA_MILK);
+        itemList.add(ORANGE_JUICE);
+        itemList.add(ROAST_COFFEE);
+        itemList.add(COFFEE_SMALL);
+        itemList.add(COFFEE_MEDIUM);
+        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
+
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(14.15, total, 0.01);
+    }
+
+    /**
+     * EXTRA offer applicable
+     * EXTRA_MILK is preselected as EXTRA offer
      * COFFEE_LARGE = 3.50
      * BACON_ROLL = 4.50
      * Total = 8.00
-     * snack offer = EXTRA_MILK(0.30)
-     * Should see 0.30 in the receipt as Total Savings
-     * */
+     * Grand Total = 8.00
+     * Extra offer = EXTRA_MILK
+     * Total Savings = 0.00
+     */
     @Test
-    public void test_coffee_large_with_extra_milk_and_snack_with_offer() {
+    public void test_hot_beverage_and_snack_should_have_extra_offer() {
         List<Item> itemList = new ArrayList<>();
         itemList.add(COFFEE_LARGE);
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double v = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(8.00, v, 0.00);
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(8.00, total, 0.00);
     }
 
-    /*
-     * 3 COFFEE_LARGE = 3.50
-     * 1 COFFEE_MEDIUM = 3.00
-     * 2 ORANGE_JUICE = 3.95
-     * 1 COFFEE_SMALL = 2.50
-     * total should be ( (3.50 * 3) + 3.00 + (3.95*2) + 2.50 ) - 2.50 (offer COFFEE_SMALL since this is the 5th item as beverage)
-     * 23.9 - 2.50 = 21.4
-     * Should see 2.50 in the receipt as Beverage discount and 2.50 in Total savings
-     * */
+    /**
+     * No Extra offer applicable since the customer ordered a cold beverage and a snack.
+     * Total = 8.45
+     * Grand Total = 8.45
+     * Total savings - 0
+     */
     @Test
-    public void test_coffee_large_with_only_beverage_offer() {
+    public void test_cold_beverage_and_snack_should_have_no_extra_offer() {
+        List<Item> itemList = new ArrayList<>();
+        itemList.add(ORANGE_JUICE);
+        itemList.add(BACON_ROLL);
+
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(8.45, total, 0.00);
+    }
+
+    /**
+     * 2 BEVERAGE offer applicable since the customer ordered 10 beverages.
+     * Customer should receive 1 COFFEE_SMALL and 1 ORANGE_JUICE as part of the beverage offer
+     * Total = 33.35
+     * Grand Total = 26.90
+     * Savings = 6.45
+     */
+    @Test
+    public void test_beverage_offer_should_have_two_beverage_offer() {
         List<Item> itemList = new ArrayList<>();
         itemList.add(COFFEE_LARGE);
         itemList.add(COFFEE_MEDIUM);
@@ -75,74 +149,93 @@ public class CoffeeCornerApplicationTest {
         itemList.add(COFFEE_SMALL); //This item is eligible for offer as a part of beverage offer
         itemList.add(COFFEE_LARGE);
         itemList.add(ORANGE_JUICE);
+        itemList.add(COFFEE_MEDIUM);
+        itemList.add(COFFEE_SMALL);
+        itemList.add(ORANGE_JUICE);//This item is eligible for offer as a part of beverage offer
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double v = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(21.40, v, 0.00);
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(26.90, total, 0.01);
     }
 
-    /*
-     * Total should be 31.45
-     * There should be 2 offers applicable
-     * one beverage offer and one extra offer
-     * Total savings should be 4.25
-     * ORANGE_JUICE is the 5th beverage, so it is free
-     * Snack (BACON_ROLL) and 1 beverage is included in the order, so Extra offer is applicable.
-     * It is assumed that EXTRA_MILK is given as extra always
-     * */
+    /**
+     * EXTRA offer applicable
+     * EXTRA_MILK is preselected as EXTRA offer
+     * Total = 12.25
+     * Grand Total = 12.25
+     * Extra offer = EXTRA_MILK
+     * Total Savings = 0.00
+     */
     @Test
-    public void test_beverage_offer_and_extra_offer() {
+    public void test_one_cold_one_hot_beverage_one_snack_should_return_one_extra_offer() {
         List<Item> itemList = new ArrayList<>();
         itemList.add(COFFEE_LARGE);
         itemList.add(EXTRA_MILK);
-        itemList.add(COFFEE_SMALL);
-        itemList.add(ROAST_COFFEE);
+        itemList.add(ORANGE_JUICE);
         itemList.add(BACON_ROLL);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double v = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(31.45, v, 0.00);
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(12.25, total, 0.00);
     }
 
-    /*
-     * Total should be 55.70
-     * There should be 4 offers applicable
-     * three beverage offer and one extra offer
-     * Total savings should be 12.15( (3.95 * 3) + 0.30)
-     * Beverage Offers - ORANGE_JUICE
-     * Extra Offer - EXTRA_MILK
-     * */
+    /**
+     * BEVERAGE offer applicable
+     * Total = 24.25
+     * Grand Total = 20.30
+     * Total Savings = 3.95
+     */
     @Test
-    public void test_beverage_offer_and_extra_offer_4_offers() {
+    public void test_five_cold_beverage_one_snack_should_return_one_beverage_offer() {
         List<Item> itemList = new ArrayList<>();
-        itemList.add(COFFEE_LARGE);
-        itemList.add(EXTRA_MILK);
-        itemList.add(COFFEE_SMALL);
-        itemList.add(ROAST_COFFEE);
-        itemList.add(BACON_ROLL);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
+        itemList.add(ORANGE_JUICE);//This item eligible for BEVERAGE offer
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
-        double v = coffeeCornerApplication.processCustomerOrder(customer);
-        assertEquals(55.70, v, 0.01);
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(20.30, total, 0.00);
+    }
+
+    /**
+     * BEVERAGE and EXTRA offers applicable
+     * Total = 27.25
+     * Grand Total = 24.25
+     * Total Savings = 3.00
+     */
+    @Test
+    public void test_five_cold_beverage_one_hot_beverage_one_snack_should_return_two_offers() {
+        List<Item> itemList = new ArrayList<>();
+        itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE);
+        itemList.add(COFFEE_MEDIUM);//This item eligible for BEVERAGE offer
+        itemList.add(ORANGE_JUICE);
+        itemList.add(BACON_ROLL);
+
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
+        double total = coffeeCornerApplication.processCustomerOrder(customer);
+        assertEquals(24.25, total, 0.00);
+    }
+
+    /**
+     * Customer object is null. Should throw IllegalArgumentException
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void test_customer_null_should_throw_exception() {
+        coffeeCornerApplication.processCustomerOrder(null);
+    }
+
+    /**
+     * Item list is null. Should throw NullPointerException
+     */
+    @Test(expected = NullPointerException.class)
+    public void test_customer_not_null_item_list_null_should_throw_exception() {
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(null).build();
+        coffeeCornerApplication.processCustomerOrder(customer);
     }
 }
