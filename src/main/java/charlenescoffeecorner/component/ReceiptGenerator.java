@@ -10,6 +10,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static charlenescoffeecorner.model.Type.COLD_BEVERAGE;
+import static charlenescoffeecorner.model.Type.HOT_BEVERAGE;
+
 public class ReceiptGenerator {
 
     private static final char NEWLINE = '\n';
@@ -135,7 +138,7 @@ public class ReceiptGenerator {
      * */
     private void displayOfferItems(Map.Entry<Item, Long> item) {
         print.accept(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
-                item.getKey().getType(), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
+                getBeverageTypeForDisplay(item.getKey().getType()), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
     }
 
     /*
@@ -143,7 +146,7 @@ public class ReceiptGenerator {
      * */
     private Consumer<Map.Entry<Item, Long>> displayGroupByItem = item -> {
         print.accept(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
-                item.getKey().getType(), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
+                getBeverageTypeForDisplay(item.getKey().getType()), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
     };
 
     /*
@@ -154,5 +157,12 @@ public class ReceiptGenerator {
             return "%10s";
         }
         return "%7s";
+    }
+
+    private String getBeverageTypeForDisplay(String beverageType) {
+        if (beverageType.equalsIgnoreCase(HOT_BEVERAGE.name()) || beverageType.equalsIgnoreCase(COLD_BEVERAGE.name())) {
+            return "BEVERAGE";
+        }
+        return beverageType;
     }
 }

@@ -1,5 +1,5 @@
 package charlenescoffeecorner.model;
 
 public enum Type {
-    BEVERAGE, SNACK, EXTRA
+    COLD_BEVERAGE, HOT_BEVERAGE, SNACK, EXTRA
 }

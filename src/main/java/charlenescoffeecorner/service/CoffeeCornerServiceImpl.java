@@ -11,9 +11,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static charlenescoffeecorner.model.Item.EXTRA_MILK;
-import static charlenescoffeecorner.model.Type.BEVERAGE;
-import static charlenescoffeecorner.model.Type.SNACK;
+import static charlenescoffeecorner.model.Type.*;
 
 public class CoffeeCornerServiceImpl implements CoffeeCornerService {
 
@@ -24,11 +22,11 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
     }
 
     /*
-    * processCustomerOrder method is for processing the customer and his orders.
-    * Input parameter - Customer object
-    * Customer object contains customer details and the list of items the customer going to purchase
-    * Return a double value i.e the total amount the customer has to pay for his purchase
-    * */
+     * processCustomerOrder method is for processing the customer and his orders.
+     * Input parameter - Customer object
+     * Customer object contains customer details and the list of items the customer going to purchase
+     * Return a double value i.e the total amount the customer has to pay for his purchase
+     * */
     @Override
     public double processCustomerOrder(Customer customer) {
 
@@ -75,7 +73,7 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
     private BiFunction<Double, Double, Double> getTotal = (initialSum, beverageOfferAmount) -> initialSum - beverageOfferAmount;
     private BiFunction<Double, Double, Double> getSavings = (beverageOfferAmount, extraOfferSavingAmount) -> beverageOfferAmount + extraOfferSavingAmount;
     private BiFunction<List<Item>, List<Item>, Double> getExtraOffer = (extraOffer, orderList) -> getExtraOfferApply(extraOffer, orderList);
-    private BiPredicate<Long, Long> beverageSnackCount = (beverageCount, snackCount) -> beverageCount > 0 && snackCount > 0;
+    private BiPredicate<Long, Long> hotBeverageSnackCount = (beverageCount, snackCount) -> beverageCount > 0 && snackCount > 0;
     private BiFunction<List<Item>, List<Item>, Double> getBeverageOfferSum = (beverageOffer, order) -> getBeverageOfferSumApply(beverageOffer, order);
 
 
@@ -85,7 +83,7 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
          * */
         long beverageCount = itemList
                 .stream()
-                .filter(beverage -> beverage.getType().equals(BEVERAGE.name()))
+                .filter(beverage -> beverage.getType().equals(HOT_BEVERAGE.name()))
                 .count();
         /*
          * Get the count of snacks
@@ -99,15 +97,17 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
          * If a customer orders a beverage and a snack, one of the extra's is free.
          * EXTRA_MILK is selected for giving to the customer as free extra.
          * */
-        if (beverageSnackCount.test(beverageCount, snackCount)) {
-            extraOffer.add(EXTRA_MILK);
-            return EXTRA_MILK.getPrice();
+        if (hotBeverageSnackCount.test(beverageCount, snackCount)) {
+            Item extraOfferItem = Item.getExtraOfferItem();
+            extraOffer.add(extraOfferItem);
+            return extraOfferItem.getPrice();
         }
         return Double.valueOf(0);
     }
 
     private Double getBeverageOfferSumApply(List<Item> beverageOffer, List<Item> itemList) {
-        List<Item> beverageList = itemList.stream().filter(beverage -> beverage.getType().equals(BEVERAGE.name()))
+        List<Item> beverageList = itemList.stream()
+                .filter(beverage -> beverage.getType().equals(COLD_BEVERAGE.name()) || beverage.getType().equals(HOT_BEVERAGE.name()))
                 .collect(Collectors.toList());
         /*
          * every 5th beverage is for free.
