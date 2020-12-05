@@ -81,7 +81,8 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
 
     private List<Item> checkCustomerItemListIsEmpty(Customer customer) {
         return Optional.ofNullable(customer.getItems())
-                .orElseThrow(() -> new NullPointerException("Item list cannot be null"));
+                .filter(item -> item.size() > 0)
+                .orElseThrow(() -> new NullPointerException("Item list cannot be null or empty"));
     }
 
     private Function<List<Item>, Double> getInitialSum = orderList -> orderList.stream().mapToDouble(item -> item.getPrice()).sum();

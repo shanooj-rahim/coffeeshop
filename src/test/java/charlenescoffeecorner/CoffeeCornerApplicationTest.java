@@ -231,11 +231,21 @@ public class CoffeeCornerApplicationTest {
     }
 
     /**
-     * Item list is null. Should throw NullPointerException
+     * Item list is null. Item list cannot be null.Should throw NullPointerException
      */
     @Test(expected = NullPointerException.class)
     public void test_customer_not_null_item_list_null_should_throw_exception() {
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(null).build();
+        coffeeCornerApplication.processCustomerOrder(customer);
+    }
+
+    /**
+     * Item list is Empty. Item list cannot be empty.Should throw NullPointerException
+     */
+    @Test(expected = NullPointerException.class)
+    public void test_customer_not_null_item_lis() {
+        List<Item> itemList = new ArrayList<>();
+        Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
         coffeeCornerApplication.processCustomerOrder(customer);
     }
 }
