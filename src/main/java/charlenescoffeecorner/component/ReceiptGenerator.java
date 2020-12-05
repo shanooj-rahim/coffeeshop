@@ -8,39 +8,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ReceiptGenerator {
+
+    private static final char NEWLINE = '\n';
+    private static final String LINE = "=================================================" + NEWLINE;
+
     public void generateReceipt(Long customerStampCard, List<Item> items, double initialSum, double beverageOfferSum,
                                 double savings, List<Item> beverageOfferList, List<Item> extraOfferList) {
-
         /*
          * Receipt Header starts
          * */
-        System.out.println("=================================================");
-        System.out.println("            CHARLENES COFFEE CORNER");
-        System.out.print("                " + LocalDateTime.now().getYear() + "/");
-        System.out.print(LocalDateTime.now().getMonth().getValue() + "/");
-        System.out.print(LocalDateTime.now().getDayOfMonth() + " ");
-        System.out.print(LocalDateTime.now().getHour() + ":");
-        System.out.println(LocalDateTime.now().getMinute());
-        System.out.println("=================================================");
+        print.accept(LINE);
+        print.accept("            CHARLENES COFFEE CORNER" + NEWLINE);
+        print.accept("                " + LocalDateTime.now().getYear() + "/");
+        print.accept(LocalDateTime.now().getMonth().getValue() + "/");
+        print.accept(LocalDateTime.now().getDayOfMonth() + " ");
+        print.accept(LocalDateTime.now().getHour() + ":");
+        print.accept(String.valueOf(LocalDateTime.now().getMinute()) + NEWLINE);
+        print.accept(LINE);
         /*
          * Customer no and receipt column heading starts
          * */
-        System.out.println("Customer No : " + customerStampCard);
-        System.out.println(String.format("%-15s %5s %13s %10s", "Item", "Type", "Quantity", "Price"));
-        System.out.println("=================================================");
+        print.accept("Customer No : " + customerStampCard + NEWLINE);
+        print.accept(String.format("%-15s %5s %13s %10s", "Item", "Type", "Quantity", "Price") + NEWLINE);
+        print.accept(LINE);
         /*
          * Group by each item from the list of orders
          * Grouping is required to show the quantity of each item
          * */
-        Map<Item, Long> groupByItem = items.stream().collect(Collectors.groupingBy(item -> item, Collectors.counting()));
+        Map<Item, Long> groupByItem = getItemsGrouped(items);
 
         /*
          * Group by each item from the beveragesList
          * Grouping is required to show the quantity of each item
          * */
-        Map<Item, Long> groupByItemBeveragesOffer = beverageOfferList.stream().collect(Collectors.groupingBy(item -> item, Collectors.counting()));
+        Map<Item, Long> groupByItemBeveragesOffer = getItemsGrouped(beverageOfferList);
 
         /*
          * This prints all the items in the list to the receipt
@@ -57,29 +61,29 @@ public class ReceiptGenerator {
         /*
          * This part displays the total amount and the total items
          * */
-        System.out.println("=================================================");
-        System.out.println("Total=                                   " + String.format("%.2f", (initialSum - beverageOfferSum)));
-        System.out.println("Total Items=                              " + String.format("%s", (items.size() + beverageOfferList.size())));
+        print.accept(LINE);
+        print.accept("Total=                                   " + String.format("%.2f", (initialSum - beverageOfferSum)) + NEWLINE);
+        print.accept("Total Items=                              " + String.format("%s", (items.size() + beverageOfferList.size())) + NEWLINE);
         /*
          * This part displays how much the customer saved in the current purchase
          * */
-        System.out.println("===============YOU HAVE SAVED====================");
+        print.accept("===============YOU HAVE SAVED====================" + NEWLINE);
 
         /*
-         * This list will contain all the orders the customer received as a part of the 2 offers
+         * This list will contain all the items the customer received as a part of the 2 offers program
          * 1st offer - every 5th beverage is free
          * 2nd offer - if the customer buys a beverage and a snack, then an 'Extra' is free
          * This list is used to display the contents under 'YOU HAVE SAVED' section of the report
          * */
-        extraOfferList.addAll(beverageOfferList);
-
+        List<Item> allOfferList = Stream.of(extraOfferList, beverageOfferList)
+                .flatMap(item -> item.stream())
+                .collect(Collectors.toList());
         /*
          * Group the list based on the item and display it.
          * Grouping is required to show the quantity.
          * Price is calculated by multiplying the quantity and price.
          * */
-        Map<Item, Long> groupByItemFullOffer = extraOfferList.stream()
-                .collect(Collectors.groupingBy(item -> item, Collectors.counting()));
+        Map<Item, Long> groupByItemFullOffer = getItemsGrouped(allOfferList);
 
         /*
          * Display the orders under YOU HAVE SAVED portion of the receipt
@@ -90,9 +94,22 @@ public class ReceiptGenerator {
         /*
          * Total savings portion of the receipt with total savings displayed
          * */
-        System.out.println("=================================================");
-        System.out.println("Total Savings=                            " + String.format("%.2f", savings));
-        System.out.println("==============THANK YOU AND VISIT AGAIN!=========");
+        print.accept(LINE);
+        print.accept("Total Savings=                            " + String.format("%.2f", savings) + NEWLINE);
+        print.accept("==============THANK YOU AND VISIT AGAIN!=========" + NEWLINE);
+    }
+
+    /*
+     * To print the output to the console
+     * */
+    Consumer<String> print = line -> System.out.print(line);
+
+    /*
+     * Group the list based on items.
+     * */
+    private Map<Item, Long> getItemsGrouped(List<Item> itemList) {
+        return itemList.stream()
+                .collect(Collectors.groupingBy(item -> item, Collectors.counting()));
     }
 
     /*
@@ -110,16 +127,16 @@ public class ReceiptGenerator {
      * Method to print the offer items in to the receipt
      * */
     private void displayOfferItems(Map.Entry<Item, Long> item) {
-        System.out.println(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
-                item.getKey().getType(), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1));
+        print.accept(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
+                item.getKey().getType(), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
     }
 
     /*
      * Method to print the offer items in to the receipt
      * */
     private Consumer<Map.Entry<Item, Long>> displayGroupByItem = item -> {
-        System.out.println(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
-                item.getKey().getType(), item.getValue(), (item.getValue() * item.getKey().getPrice())));
+        print.accept(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
+                item.getKey().getType(), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
     };
 
     /*
