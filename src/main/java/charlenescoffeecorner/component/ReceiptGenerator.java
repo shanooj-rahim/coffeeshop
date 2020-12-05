@@ -16,16 +16,16 @@ public class ReceiptGenerator {
     private static final String LINE = "=================================================" + NEWLINE;
 
     /*
-    * generateReceipt method is to generate the receipt for the purchase by customer.
-    * Input parameters
-    *   -   (Long) customer stamp card  -   Unique card number of a customer
-    *   -   List<Item> items            -   All the items the customer ordered in this purchase
-    *   -   (double) initialSum         -   The sum of all the item prices with out calculating the offers
-    *   -   (double) beverageOfferSum   -   The sum of the prices of the beverages the customer received as part of the beverage offer
-    *   -   (double) savings            -   Total amount saved by the customer as a part of the 2 offers
-    *   -   List<Item> beverageOfferList-   List of beverages the customer received as part of the beverage offer
-    *   -   List<Item> extraOfferList   -   List of extra's the customer received as part of the extra offer
-    * */
+     * generateReceipt method is to generate the receipt for the purchase by customer.
+     * Input parameters
+     *   -   (Long) customer stamp card  -   Unique card number of a customer
+     *   -   List<Item> items            -   All the items the customer ordered in this purchase
+     *   -   (double) initialSum         -   The sum of all the item prices with out calculating the offers
+     *   -   (double) beverageOfferSum   -   The sum of the prices of the beverages the customer received as part of the beverage offer
+     *   -   (double) savings            -   Total amount saved by the customer as a part of the 2 offers
+     *   -   List<Item> beverageOfferList-   List of beverages the customer received as part of the beverage offer
+     *   -   List<Item> extraOfferList   -   List of extra's the customer received as part of the extra offer
+     * */
     public void generateReceipt(Long customerStampCard, List<Item> items, double initialSum, double beverageOfferSum,
                                 double savings, List<Item> beverageOfferList, List<Item> extraOfferList) {
         /*
@@ -100,7 +100,7 @@ public class ReceiptGenerator {
          * Display the orders under YOU HAVE SAVED portion of the receipt
          * This will display all the items the customer received as a part of the offers
          * */
-        groupByItemFullOffer.entrySet().stream().forEach(item -> displayGroupByItemFullOffer.accept(item));
+        groupByItemFullOffer.entrySet().stream().forEach(item -> displayGroupByItem.accept(item));
 
         /*
          * Total savings portion of the receipt with total savings displayed
@@ -129,10 +129,6 @@ public class ReceiptGenerator {
      * This will print the price in -ve since it is free.
      * */
     private Consumer<Map.Entry<Item, Long>> displayGroupByItemOffer = item -> displayOfferItems(item);
-    /*
-     * Method to display all the items the customer received as a part of the offers
-     * */
-    private Consumer<Map.Entry<Item, Long>> displayGroupByItemFullOffer = item -> displayOfferItems(item);
 
     /*
      * Method to print the offer items in to the receipt

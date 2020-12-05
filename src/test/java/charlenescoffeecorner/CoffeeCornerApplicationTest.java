@@ -57,11 +57,11 @@ public class CoffeeCornerApplicationTest {
     }
 
     /*
-     * COFFEE_LARGE = 3.50
-     * COFFEE_MEDIUM = 3.00
-     * ORANGE_JUICE = 3.95
-     * COFFEE_SMALL = 2.50
-     * total should be ( (3.50 * 3) + 3.00 + (3.95*2) + 2.50 ) - 2.50 (offer COFFEE_SMALL)
+     * 3 COFFEE_LARGE = 3.50
+     * 1 COFFEE_MEDIUM = 3.00
+     * 2 ORANGE_JUICE = 3.95
+     * 1 COFFEE_SMALL = 2.50
+     * total should be ( (3.50 * 3) + 3.00 + (3.95*2) + 2.50 ) - 2.50 (offer COFFEE_SMALL since this is the 5th item as beverage)
      * 23.9 - 2.50 = 21.4
      * Should see 2.50 in the receipt as Beverage discount and 2.50 in Total savings
      * */
@@ -72,7 +72,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(COFFEE_MEDIUM);
         itemList.add(ORANGE_JUICE);
         itemList.add(COFFEE_LARGE);
-        itemList.add(COFFEE_SMALL);
+        itemList.add(COFFEE_SMALL); //This item is eligible for offer as a part of beverage offer
         itemList.add(COFFEE_LARGE);
         itemList.add(ORANGE_JUICE);
 
@@ -86,6 +86,9 @@ public class CoffeeCornerApplicationTest {
      * There should be 2 offers applicable
      * one beverage offer and one extra offer
      * Total savings should be 4.25
+     * ORANGE_JUICE is the 5th beverage, so it is free
+     * Snack (BACON_ROLL) and 1 beverage is included in the order, so Extra offer is applicable.
+     * It is assumed that EXTRA_MILK is given as extra always
      * */
     @Test
     public void test_beverage_offer_and_extra_offer() {
@@ -97,7 +100,7 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
@@ -112,6 +115,8 @@ public class CoffeeCornerApplicationTest {
      * There should be 4 offers applicable
      * three beverage offer and one extra offer
      * Total savings should be 12.15( (3.95 * 3) + 0.30)
+     * Beverage Offers - ORANGE_JUICE
+     * Extra Offer - EXTRA_MILK
      * */
     @Test
     public void test_beverage_offer_and_extra_offer_4_offers() {
@@ -123,17 +128,17 @@ public class CoffeeCornerApplicationTest {
         itemList.add(BACON_ROLL);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
         itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
-        itemList.add(ORANGE_JUICE);
+        itemList.add(ORANGE_JUICE); //This item is eligible for offer as a part of beverage offer
         itemList.add(BACON_ROLL);
 
         Customer customer = new Customer.Builder().customerStampCard(123546L).order(itemList).build();
