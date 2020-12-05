@@ -49,6 +49,17 @@ mvn clean install
 ```bash
 mvn test
 ```
+#### 4. To see the main class, navigate to
+
+```bash
+src\main\java\charlenescoffeecorner\CoffeeCornerApplication.java
+```
+
+#### 5. To see the test cases, navigate to
+
+```bash
+src\test\java\charlenescoffeecorner\CoffeeCornerApplicationTest.java
+```
 
 ## Points to keep in mind
 
