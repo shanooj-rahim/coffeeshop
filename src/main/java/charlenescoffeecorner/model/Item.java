@@ -4,18 +4,19 @@ import static charlenescoffeecorner.model.Type.*;
 
 public enum Item {
 
-    COFFEE_SMALL(2.50, HOT_BEVERAGE.name()),
-    COFFEE_MEDIUM(3.00, HOT_BEVERAGE.name()),
-    COFFEE_LARGE(3.50, HOT_BEVERAGE.name()),
-    BACON_ROLL(4.50, SNACK.name()),
-    ORANGE_JUICE(3.95, COLD_BEVERAGE.name()),
-    EXTRA_MILK(0.30, EXTRA.name()),
-    FOAMED_MILK(0.50, EXTRA.name()),
-    ROAST_COFFEE(0.90, EXTRA.name());
-    private double price;
-    private String type;
+    COFFEE_SMALL(2.50, HOT_BEVERAGE),
+    COFFEE_MEDIUM(3.00, HOT_BEVERAGE),
+    COFFEE_LARGE(3.50, HOT_BEVERAGE),
+    BACON_ROLL(4.50, SNACK),
+    ORANGE_JUICE(3.95, COLD_BEVERAGE),
+    EXTRA_MILK(0.30, EXTRA),
+    FOAMED_MILK(0.50, EXTRA),
+    ROAST_COFFEE(0.90, EXTRA);
 
-    Item(double price, String type) {
+    private double price;
+    private Type type;
+
+    Item(double price, Type type) {
         this.price = price;
         this.type = type;
     }
@@ -24,7 +25,7 @@ public enum Item {
         return price;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 

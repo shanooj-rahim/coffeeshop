@@ -137,32 +137,31 @@ public class ReceiptGenerator {
      * Method to print the offer items in to the receipt
      * */
     private void displayOfferItems(Map.Entry<Item, Long> item) {
-        print.accept(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
-                getBeverageTypeForDisplay(item.getKey().getType()), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
+        Type type = item.getKey().getType();
+        print.accept(String.format("%-15s %5s" + getQuantityFormatting(type) + "%15.2f", item.getKey(),
+                getBeverageTypeForDisplay(type), item.getValue(), (item.getValue() * item.getKey().getPrice()) * -1) + NEWLINE);
     }
 
     /*
      * Method to print the offer items in to the receipt
      * */
     private Consumer<Map.Entry<Item, Long>> displayGroupByItem = item -> {
-        print.accept(String.format("%-15s %5s" + getQuantityFormatting(item) + "%15.2f", item.getKey(),
-                getBeverageTypeForDisplay(item.getKey().getType()), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
+        Type type = item.getKey().getType();
+        print.accept(String.format("%-15s %5s" + getQuantityFormatting(type) + "%15.2f", item.getKey(),
+                getBeverageTypeForDisplay(type), item.getValue(), (item.getValue() * item.getKey().getPrice())) + NEWLINE);
     };
 
     /*
      * Method to format the entries in to the receipt for snacks and extra
      * */
-    private String getQuantityFormatting(Map.Entry<Item, Long> item) {
-        if (item.getKey().getType().equals(Type.SNACK.name()) || item.getKey().getType().equals(Type.EXTRA.name())) {
-            return "%10s";
-        }
-        return "%7s";
+    private String getQuantityFormatting(Type item) {
+        return item == Type.SNACK || item == Type.EXTRA ? "%10s" : "%7s";
     }
 
-    private String getBeverageTypeForDisplay(String beverageType) {
-        if (beverageType.equalsIgnoreCase(HOT_BEVERAGE.name()) || beverageType.equalsIgnoreCase(COLD_BEVERAGE.name())) {
-            return "BEVERAGE";
-        }
-        return beverageType;
+    /*
+     * Method to print the type of the beverage as BEVERAGE if the type is HOT_BEVERAGE or COLD_BEVERAGE
+     * */
+    private String getBeverageTypeForDisplay(Type beverageType) {
+        return beverageType == HOT_BEVERAGE || beverageType == COLD_BEVERAGE ? "BEVERAGE" : beverageType.name();
     }
 }

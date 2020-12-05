@@ -83,14 +83,14 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
          * */
         long beverageCount = itemList
                 .stream()
-                .filter(beverage -> beverage.getType().equals(HOT_BEVERAGE.name()))
+                .filter(beverage -> beverage.getType() == HOT_BEVERAGE)
                 .count();
         /*
          * Get the count of snacks
          * */
         long snackCount = itemList
                 .stream()
-                .filter(snack -> snack.getType().equals(SNACK.name()))
+                .filter(snack -> snack.getType() == SNACK)
                 .count();
 
         /*
@@ -107,7 +107,7 @@ public class CoffeeCornerServiceImpl implements CoffeeCornerService {
 
     private Double getBeverageOfferSumApply(List<Item> beverageOffer, List<Item> itemList) {
         List<Item> beverageList = itemList.stream()
-                .filter(beverage -> beverage.getType().equals(COLD_BEVERAGE.name()) || beverage.getType().equals(HOT_BEVERAGE.name()))
+                .filter(beverage -> (beverage.getType() == COLD_BEVERAGE || beverage.getType() == HOT_BEVERAGE))
                 .collect(Collectors.toList());
         /*
          * every 5th beverage is for free.
